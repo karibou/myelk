@@ -1,0 +1,15 @@
+- hosts: elk-nodes
+  vars:
+    cluster_name: "MyScalewayCluster"
+    master_node: "elk1"
+    elk_config: "/etc/elasticsearch/elasticsearch.yml"
+    api_token: "<insert token here>"
+    organization: "<insert organization here>"
+    cp_api: "https://cp-par1.scaleway.com"
+    image_id: "f974feac-abae-4365-b988-8ec7d1cec10d"
+
+  roles:
+    - setup-elk
+  user: root
+  become: yes
+  gather_facts: no

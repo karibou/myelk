@@ -1,0 +1,14 @@
+#cloud-config
+
+apt:
+  sources:
+    elk.list:
+      source: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+      keyid: D27D666CD88E42B4
+
+package_update: true
+
+packages:
+  - openjdk-11-jre
+  - elasticsearch
+final_message: "elk node ready for configuration"
