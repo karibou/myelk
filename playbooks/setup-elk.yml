@@ -3,13 +3,69 @@
     cluster_name: "MyScalewayCluster"
     master_node: "elk1"
     elk_config: "/etc/elasticsearch/elasticsearch.yml"
-    api_token: "<insert token here>"
-    organization: "<insert organization here>"
-    cp_api: "https://cp-par1.scaleway.com"
-    image_id: "f974feac-abae-4365-b988-8ec7d1cec10d"
+    api_token: "fa772681-cae0-4bbe-a09f-2ab53568ba44"
+    organization: "124e9543-cada-45c6-845b-a867e6ffd4eb"
+    cp_api: "https://api-fr-par.scaleway.com/instance/v1/zones/fr-par-2"
+    image_id: "401a8e7b-f215-49b5-af8d-e39d9efff24c"
 
   roles:
-    - setup-elk
+    - elastic.elasticsearch
   user: root
   become: yes
   gather_facts: no
+
+- hosts: master_node
+  roles:
+    - role: elastic.elasticsearch
+  vars:
+    es_heap_size: "1g"
+    es_config:
+      cluster.name: "bench-cluster"
+      cluster.initial_master_nodes: "{{ ansible_default_ipv4.address }}"
+      discovery.seed_hosts: "{{ ansible_default_ipv4.address }}:9300"
+      http.host: 0.0.0.0
+      http.port: 9200
+      node.data: false
+      node.master: true
+      transport.host: 0.0.0.0
+      transport.port: 9300
+      bootstrap.memory_lock: false
+    es_plugins:
+     - plugin: ingest-attachment
+
+- hosts: data_node_1
+  roles:
+    - role: elastic.elasticsearch
+  vars:
+    es_data_dirs:
+      - "/opt/elasticsearch"
+    es_config:
+      cluster.name: "bench-cluster"
+      cluster.initial_master_nodes: "{{ master_node_ip }}"
+      discovery.seed_hosts: "{{ master_node_ip }}:9300"
+      http.host: 0.0.0.0
+      http.port: 9200
+      node.data: true
+      node.master: false
+      transport.host: 0.0.0.0
+      transport.port: 9300
+      bootstrap.memory_lock: false
+    es_plugins:
+      - plugin: ingest-attachment
+
+- hosts: data_node_2
+  roles:
+    - role: elastic.elasticsearch
+  vars:
+    es_config:
+      cluster.name: "bench-cluster"
+      discovery.seed_hosts: "{{ master_node_ip }}:9300"
+      http.host: 0.0.0.0
+      http.port: 9200
+      node.data: true
+      node.master: false
+      transport.host: 0.0.0.0
+      transport.port: 9300
+      bootstrap.memory_lock: false
+    es_plugins:
+      - plugin: ingest-attachment
