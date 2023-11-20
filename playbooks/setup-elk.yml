@@ -7,6 +7,8 @@
     organization: "124e9543-cada-45c6-845b-a867e6ffd4eb"
     cp_api: "https://api-fr-par.scaleway.com/instance/v1/zones/fr-par-2"
     image_id: "401a8e7b-f215-49b5-af8d-e39d9efff24c"
+    es_version: "7.6.1"
+    es_allow_downgrades: true
 
   roles:
     - elastic.elasticsearch
@@ -18,6 +20,8 @@
   roles:
     - role: elastic.elasticsearch
   vars:
+    es_allow_downgrades: true
+    es_version: "7.6.1"
     es_heap_size: "1g"
     es_config:
       cluster.name: "bench-cluster"
@@ -37,6 +41,8 @@
   roles:
     - role: elastic.elasticsearch
   vars:
+    es_version: "7.6.1"
+    es_allow_downgrades: true
     es_data_dirs:
       - "/opt/elasticsearch"
     es_config:
@@ -57,6 +63,8 @@
   roles:
     - role: elastic.elasticsearch
   vars:
+    es_version: "7.6.1"
+    es_allow_downgrades: true
     es_config:
       cluster.name: "bench-cluster"
       discovery.seed_hosts: "{{ master_node_ip }}:9300"

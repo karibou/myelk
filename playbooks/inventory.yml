@@ -1,6 +1,6 @@
 [master_node]
-51.159.168.166 hostname=elk1
+51.159.150.34 hostname=elk1
 [data_node_1]
-51.159.146.1 hostname=elk2 master_node_ip=51.159.168.166
+51.159.136.128 hostname=elk2 master_node_ip=51.159.150.34
 [data_node_2]
-51.159.158.172 hostname=elk3 master_node_ip=51.159.168.166
+51.159.153.180 hostname=elk3 master_node_ip=51.159.150.34
